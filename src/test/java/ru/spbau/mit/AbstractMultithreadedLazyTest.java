@@ -40,12 +40,15 @@ public abstract class AbstractMultithreadedLazyTest {
             };
         }
 
-        for (TestSupplier s : suppliers)
+        for (TestSupplier s : suppliers) {
             assertEquals(0, s.getCallsCount());
-        for (TestThread th : ths)
+        }
+        for (TestThread th : ths) {
             th.start();
-        for (TestThread th : ths)
+        }
+        for (TestThread th : ths) {
             th.join();
+        }
         return results;
     }
 }
