@@ -10,7 +10,6 @@ import ru.spbau.mit.utils.TestThread;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.function.Supplier;
 
 import static org.junit.Assert.*;
@@ -34,7 +33,7 @@ public class MultithreadedLazyTest {
     }
 
     private final int THREADS_COUNT = 2000;
-    private final int LAZIES_COUNT = 200;
+    private final int LAZIES_COUNT = 2000;
 
     private Integer[][] runThreads(TestSupplier[] suppliers) throws InterruptedException {
         final TestThread[] ths = new TestThread[THREADS_COUNT];
@@ -55,7 +54,6 @@ public class MultithreadedLazyTest {
                     for (int i = 0; i < LAZIES_COUNT; i++) {
                         order.add(i);
                     }
-                    Collections.shuffle(order);
                     for (Integer lazy : order) {
                         results[id][lazy] = lazies.get(lazy).get();
                     }
