@@ -2,7 +2,7 @@ package ru.spbau.mit;
 
 import org.junit.Test;
 
-import static org.junit.Assert.fail;
+import static org.junit.Assert.*;
 
 public class SecondPartTasksTest {
 
@@ -13,7 +13,7 @@ public class SecondPartTasksTest {
 
     @Test
     public void testPiDividedBy4() {
-        fail();
+        assertEquals(Math.PI / 4, SecondPartTasks.piDividedBy4(), 1e-2);
     }
 
     @Test

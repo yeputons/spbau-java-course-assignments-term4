@@ -1,7 +1,11 @@
 package ru.spbau.mit;
 
+import java.awt.geom.Point2D;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public final class SecondPartTasks {
 
@@ -17,7 +21,11 @@ public final class SecondPartTasks {
     // Надо промоделировать этот процесс с помощью класса java.util.Random и
     // посчитать, какова вероятность попасть в мишень.
     public static double piDividedBy4() {
-        throw new UnsupportedOperationException();
+        Random rnd = new Random();
+        Stream<Point2D> points = Stream.generate(() -> new Point2D.Double(rnd.nextDouble(), rnd.nextDouble()));
+        return points
+                .limit(1000000)
+                .collect(Collectors.averagingInt(p -> p.distance(0, 0) <= 1 ? 1 : 0));
     }
 
     // Дано отображение из имени автора в список с содержанием его произведений.
