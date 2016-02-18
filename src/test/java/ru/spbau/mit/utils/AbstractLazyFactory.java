@@ -1,6 +1,6 @@
-package net.yeputons.spbau.java.utils;
+package ru.spbau.mit.utils;
 
-import net.yeputons.spbau.java.Lazy;
+import ru.spbau.mit.Lazy;
 
 import java.util.function.Supplier;
 

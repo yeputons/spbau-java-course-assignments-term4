@@ -1,7 +1,7 @@
-package net.yeputons.spbau.java;
+package ru.spbau.mit;
 
-import net.yeputons.spbau.java.utils.AbstractLazyFactory;
-import net.yeputons.spbau.java.utils.TestSupplier;
+import ru.spbau.mit.utils.AbstractLazyFactory;
+import ru.spbau.mit.utils.TestSupplier;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;

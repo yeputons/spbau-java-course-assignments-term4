@@ -1,6 +1,6 @@
-package net.yeputons.spbau.java;
+package ru.spbau.mit;
 
-import net.yeputons.spbau.java.utils.TestSupplier;
+import ru.spbau.mit.utils.TestSupplier;
 import org.junit.Test;
 
 import java.util.function.Supplier;

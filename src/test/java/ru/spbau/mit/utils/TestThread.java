@@ -1,4 +1,4 @@
-package net.yeputons.spbau.java.utils;
+package ru.spbau.mit.utils;
 
 import static org.junit.Assert.*;
 
