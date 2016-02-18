@@ -83,15 +83,12 @@ public class MultithreadedLazyTest {
         Integer[][] results = runThreads(suppliers);
 
         boolean haveNull = false;
-        boolean haveNonNull = false;
         for (int lazy = 0; lazy < LAZIES_COUNT; lazy++) {
             for (int th = 0; th < THREADS_COUNT; th++) {
                 assertEquals(results[0][lazy], results[th][lazy]);
             }
             if (results[0][lazy] == null) {
                 haveNull = true;
-            } else {
-                haveNonNull = true;
             }
         }
         assertEquals(shouldHaveNull, haveNull);
