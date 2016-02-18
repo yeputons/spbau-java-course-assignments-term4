@@ -4,9 +4,7 @@ import java.util.concurrent.atomic.AtomicReferenceFieldUpdater;
 import java.util.function.Supplier;
 
 public class LockFreeLazy<T> implements Lazy<T> {
-    // Similarly to `SingletonLazy`, volatile here is optional.
-    // If `supplier` is null, then we are guaranteed to see change of `result` as well
-    private Supplier<T> supplier;
+    private volatile Supplier<T> supplier;
     private volatile Object result = RESULT_UNINITIALIZED;
 
     private static final Object RESULT_UNINITIALIZED = new Object();
