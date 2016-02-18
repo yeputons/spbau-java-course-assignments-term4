@@ -7,10 +7,10 @@ public class LockFreeLazy<T> implements Lazy<T> {
     // Similarly to `SingletonLazy`, volatile here is optional.
     // If `supplier` is null, then we are guaranteed to see change of `result` as well
     private Supplier<T> supplier;
-    private volatile Object result = stubResult;
+    private volatile Object result = RESULT_UNINITIALIZED;
 
-    private static final Object stubResult = new Object();
-    private static final AtomicReferenceFieldUpdater<LockFreeLazy, Object> resultUpdater =
+    private static final Object RESULT_UNINITIALIZED = new Object();
+    private static final AtomicReferenceFieldUpdater<LockFreeLazy, Object> RESULT_UPDATER =
             AtomicReferenceFieldUpdater.newUpdater(LockFreeLazy.class, Object.class, "result");
 
     public LockFreeLazy(Supplier<T> supplier) {
@@ -25,7 +25,7 @@ public class LockFreeLazy<T> implements Lazy<T> {
             return (T) result;
         }
         T currentResult = currentSupplier.get();
-        resultUpdater.compareAndSet(this, stubResult, currentResult);
+        RESULT_UPDATER.compareAndSet(this, RESULT_UNINITIALIZED, currentResult);
         supplier = null;
         return (T) result;
     }
