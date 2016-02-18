@@ -20,11 +20,12 @@ public final class SecondPartTasks {
     // Стрелок атакует мишень и каждый раз попадает в произвольную точку квадрата.
     // Надо промоделировать этот процесс с помощью класса java.util.Random и
     // посчитать, какова вероятность попасть в мишень.
+    private static final int MONTE_CARLO_ITERATIONS = 1000000;
     public static double piDividedBy4() {
         Random rnd = new Random();
         Stream<Point2D> points = Stream.generate(() -> new Point2D.Double(rnd.nextDouble(), rnd.nextDouble()));
         return points
-                .limit(1000000)
+                .limit(MONTE_CARLO_ITERATIONS)
                 .collect(Collectors.averagingInt(p -> p.distance(0, 0) <= 1 ? 1 : 0));
     }
 
