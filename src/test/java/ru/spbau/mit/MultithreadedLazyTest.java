@@ -19,17 +19,17 @@ public class MultithreadedLazyTest {
     @Parameterized.Parameters
     public static Collection<Object[]> data() {
         return Arrays.asList(new Object[][] {
-                {(AbstractLazyFactory) LazyFactory::createSingletonLazy, false},
-                {(AbstractLazyFactory) LazyFactory::createLockFreeLazy, true}
+                {(AbstractLazyFactory) LazyFactory::createSingletonLazy, true},
+                {(AbstractLazyFactory) LazyFactory::createLockFreeLazy, false}
         });
     }
 
     private final AbstractLazyFactory factory;
-    private final boolean shouldHaveConflicts;
+    private final boolean shouldNotHaveConflicts;
 
-    public MultithreadedLazyTest(AbstractLazyFactory factory, boolean shouldHaveConflicts) {
+    public MultithreadedLazyTest(AbstractLazyFactory factory, boolean shouldNotHaveConflicts) {
         this.factory = factory;
-        this.shouldHaveConflicts = shouldHaveConflicts;
+        this.shouldNotHaveConflicts = shouldNotHaveConflicts;
     }
 
     private final int THREADS_COUNT = 2000;
@@ -97,7 +97,9 @@ public class MultithreadedLazyTest {
             haveConflicts = haveConflicts || s.getCallsCount() > 1;
             assertTrue(s.getCallsCount() < THREADS_COUNT); // check for caching
         }
-        assertEquals(shouldHaveConflicts, haveConflicts);
+        if (shouldNotHaveConflicts) {
+            assertFalse(haveConflicts);
+        }
     }
 
     @Test
