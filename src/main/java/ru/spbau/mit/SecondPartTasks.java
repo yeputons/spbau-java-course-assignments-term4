@@ -1,6 +1,7 @@
 package ru.spbau.mit;
 
 import java.awt.geom.Point2D;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -32,7 +33,29 @@ public final class SecondPartTasks {
     // Дано отображение из имени автора в список с содержанием его произведений.
     // Надо вычислить, чья общая длина произведений наибольшая.
     public static String findPrinter(Map<String, List<String>> compositions) {
-        throw new UnsupportedOperationException();
+        return compositions.entrySet().stream()
+                .map(e -> new HashMap.Entry<String, Long>() {
+                    private final Long sumLength =
+                            e.getValue().stream()
+                                    .collect(Collectors.summarizingInt(String::length)).getSum();
+
+                    @Override
+                    public String getKey() {
+                        return e.getKey();
+                    }
+
+                    @Override
+                    public Long getValue() {
+                        return sumLength;
+                    }
+
+                    @Override
+                    public Long setValue(Long value) {
+                        throw new UnsupportedOperationException();
+                    }
+                })
+                .max((a, b) -> Long.compare(a.getValue(), b.getValue()))
+                .get().getKey();
     }
 
     // Вы крупный поставщик продуктов. Каждая торговая сеть делает вам заказ в виде Map<Товар, Количество>.

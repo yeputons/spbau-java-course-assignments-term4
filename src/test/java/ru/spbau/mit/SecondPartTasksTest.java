@@ -2,10 +2,14 @@ package ru.spbau.mit;
 
 import org.junit.Test;
 
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import static org.junit.Assert.*;
 
 public class SecondPartTasksTest {
-
     @Test
     public void testFindQuotes() {
         fail();
@@ -18,7 +22,14 @@ public class SecondPartTasksTest {
 
     @Test
     public void testFindPrinter() {
-        fail();
+        Map<String, List<String>> compositions = new HashMap<>();
+        compositions.put("1", Arrays.asList());
+        compositions.put("2", Arrays.asList("foobar"));
+        compositions.put("3", Arrays.asList("fo", "ba"));
+        assertEquals("2", SecondPartTasks.findPrinter(compositions));
+
+        compositions.put("3", Arrays.asList("fo", "ba", "baz"));
+        assertEquals("3", SecondPartTasks.findPrinter(compositions));
     }
 
     @Test
