@@ -32,8 +32,8 @@ public class MultithreadedLazyTest {
         this.shouldNotHaveConflicts = shouldNotHaveConflicts;
     }
 
-    private final int THREADS_COUNT = 2000;
-    private final int LAZIES_COUNT = 2000;
+    private static final int THREADS_COUNT = 2000;
+    private static final int LAZIES_COUNT = 2000;
 
     private Integer[][] runThreads(TestSupplier[] suppliers) throws InterruptedException {
         final TestThread[] ths = new TestThread[THREADS_COUNT];
@@ -105,7 +105,9 @@ public class MultithreadedLazyTest {
 
     @Test
     public void testNullFirstTen() throws InterruptedException {
+        //CHECKSTYLE.OFF: MagicNumber
         test(() -> new TestSupplier(10), true);
+        //CHECKSTYLE.ON: MagicNumberr
     }
 
     @Test
