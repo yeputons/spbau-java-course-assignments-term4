@@ -1,3 +1,5 @@
+//CHECKSTYLE.OFF: MagicNumber
+//CHECKSTYLE.OFF: LineLength
 package ru.spbau.mit;
 
 import org.junit.Test;
@@ -5,7 +7,6 @@ import org.junit.rules.TemporaryFolder;
 
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.OpenOption;
 import java.nio.file.Path;
 import java.util.*;
 import java.util.stream.Collectors;
