@@ -1,6 +1,12 @@
 package ru.spbau.mit;
 
 import java.awt.geom.Point2D;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -11,7 +17,17 @@ public final class SecondPartTasks {
 
     // Найти строки из переданных файлов, в которых встречается указанная подстрока.
     public static List<String> findQuotes(List<String> paths, CharSequence sequence) {
-        throw new UnsupportedOperationException();
+        return paths.stream()
+                .map(Paths::get)
+                .flatMap(p -> {
+                    try {
+                        return Files.lines(p);
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                })
+                .filter(s -> s.contains(sequence))
+                .collect(Collectors.toList());
     }
 
     // В квадрат с длиной стороны 1 вписана мишень.

@@ -1,15 +1,47 @@
 package ru.spbau.mit;
 
 import org.junit.Test;
+import org.junit.rules.TemporaryFolder;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.OpenOption;
+import java.nio.file.Path;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static org.junit.Assert.*;
 
 public class SecondPartTasksTest {
     @Test
-    public void testFindQuotes() {
-        fail();
+    public void testFindQuotes() throws IOException {
+        TemporaryFolder testFolder = new TemporaryFolder();
+        testFolder.create();
+        Path[] files = new Path[4];
+        for (int i = 0; i < files.length; i++) {
+            files[i] = testFolder.newFile(String.format("text%d.txt", i)).toPath();
+        }
+        List<String> fileNames = Arrays.asList(files).stream().map(Path::toString).collect(Collectors.toList());
+
+        Files.write(files[0], Arrays.asList("0 line ehlo", "0 hello hello", "1 world"));
+        Files.write(files[1], Arrays.asList("1 my single line", "1 Big Hello"));
+        Files.write(files[2], Collections.emptyList());
+        Files.write(files[3], Arrays.asList("2 hello hello", "0 this is hello world"));
+
+        assertEquals(
+                Arrays.asList("0 hello hello", "2 hello hello", "0 this is hello world"),
+                SecondPartTasks.findQuotes(fileNames, "hello")
+        );
+
+        assertEquals(
+                Collections.emptyList(),
+                SecondPartTasks.findQuotes(Collections.singletonList(fileNames.get(2)), "hello")
+        );
+
+        assertEquals(
+                Collections.emptyList(),
+                SecondPartTasks.findQuotes(Collections.emptyList(), "hello")
+        );
     }
 
     @Test
