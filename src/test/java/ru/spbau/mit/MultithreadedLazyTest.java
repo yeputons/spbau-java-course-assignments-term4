@@ -87,14 +87,13 @@ public class MultithreadedLazyTest {
         }
         assertEquals(shouldHaveNull, haveNull);
 
-        boolean haveConflicts = false;
         for (TestSupplier s : suppliers) {
-            assertTrue(s.getCallsCount() >= 1);
-            haveConflicts = haveConflicts || s.getCallsCount() > 1;
-            assertTrue(s.getCallsCount() < THREADS_COUNT); // check for caching
-        }
-        if (shouldNotHaveConflicts) {
-            assertFalse(haveConflicts);
+            if (shouldNotHaveConflicts) {
+                assertTrue(s.getCallsCount() == 1);
+            } else {
+                assertTrue(s.getCallsCount() >= 1);
+                assertTrue(s.getCallsCount() < THREADS_COUNT); // check for caching
+            }
         }
     }
 
