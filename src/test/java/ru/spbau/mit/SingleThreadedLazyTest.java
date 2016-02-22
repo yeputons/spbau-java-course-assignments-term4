@@ -18,7 +18,8 @@ public class SingleThreadedLazyTest {
     public static Collection<Object[]> data() {
         return Arrays.asList(new Object[][] {
                 {(AbstractLazyFactory) LazyFactory::createSingleThreadedLazy},
-                {(AbstractLazyFactory) LazyFactory::createSingletonLazy}
+                {(AbstractLazyFactory) LazyFactory::createSingletonLazy},
+                {(AbstractLazyFactory) LazyFactory::createLockFreeLazy}
         });
     }
 
