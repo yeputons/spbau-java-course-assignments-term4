@@ -25,11 +25,11 @@ public class MultithreadedLazyTest {
     }
 
     private final AbstractLazyFactory factory;
-    private final boolean shouldNotHaveConflicts;
+    private final boolean shouldComputeExactlyOnce;
 
-    public MultithreadedLazyTest(AbstractLazyFactory factory, boolean shouldNotHaveConflicts) {
+    public MultithreadedLazyTest(AbstractLazyFactory factory, boolean shouldComputeExactlyOnce) {
         this.factory = factory;
-        this.shouldNotHaveConflicts = shouldNotHaveConflicts;
+        this.shouldComputeExactlyOnce = shouldComputeExactlyOnce;
     }
 
     private static final int THREADS_COUNT = 2000;
@@ -88,7 +88,7 @@ public class MultithreadedLazyTest {
         assertEquals(shouldHaveNull, haveNull);
 
         for (TestSupplier s : suppliers) {
-            if (shouldNotHaveConflicts) {
+            if (shouldComputeExactlyOnce) {
                 assertTrue(s.getCallsCount() == 1);
             } else {
                 assertTrue(s.getCallsCount() >= 1);
