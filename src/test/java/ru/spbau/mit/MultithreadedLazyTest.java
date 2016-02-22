@@ -50,11 +50,7 @@ public class MultithreadedLazyTest {
             ths[i] = new TestThread() {
                 @Override
                 public void run() throws Exception {
-                    ArrayList<Integer> order = new ArrayList<Integer>();
-                    for (int i = 0; i < LAZIES_COUNT; i++) {
-                        order.add(i);
-                    }
-                    for (Integer lazy : order) {
+                    for (int lazy = 0; lazy < LAZIES_COUNT; lazy++) {
                         results[id][lazy] = lazies.get(lazy).get();
                     }
                 }
