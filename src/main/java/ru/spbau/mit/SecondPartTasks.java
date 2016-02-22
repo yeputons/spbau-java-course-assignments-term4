@@ -37,8 +37,9 @@ public final class SecondPartTasks {
     private static final int MONTE_CARLO_ITERATIONS = 1000000;
     public static double piDividedBy4() {
         Random rnd = new Random();
-        Stream<Point2D> points = Stream.generate(() -> new Point2D.Double(rnd.nextDouble(), rnd.nextDouble()));
-        return points
+        return Stream.generate(
+                    () -> new Point2D.Double(rnd.nextDouble(), rnd.nextDouble())
+                )
                 .limit(MONTE_CARLO_ITERATIONS)
                 .collect(Collectors.averagingInt(p -> p.distance(0, 0) <= 1 ? 1 : 0));
     }
