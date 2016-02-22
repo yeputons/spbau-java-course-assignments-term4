@@ -1,10 +1,7 @@
 package ru.spbau.mit;
 
 import java.awt.geom.Point2D;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -61,6 +58,12 @@ public final class SecondPartTasks {
     // Вы крупный поставщик продуктов. Каждая торговая сеть делает вам заказ в виде Map<Товар, Количество>.
     // Необходимо вычислить, какой товар и в каком количестве надо поставить.
     public static Map<String, Integer> calculateGlobalOrder(List<Map<String, Integer>> orders) {
-        throw new UnsupportedOperationException();
+        final Map<String, Integer> result = new HashMap<>();
+        orders.stream()
+                .flatMap(m -> m.entrySet().stream())
+                .forEach(
+                        e -> result.merge(e.getKey(), e.getValue(), (a, b) -> a + b)
+                );
+        return result;
     }
 }
