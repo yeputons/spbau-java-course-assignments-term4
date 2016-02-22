@@ -6,7 +6,7 @@ class SingleThreadedLazy<T> implements Lazy<T> {
     private Supplier<T> supplier;
     private T result;
 
-    public SingleThreadedLazy(Supplier<T> supplier) {
+    SingleThreadedLazy(Supplier<T> supplier) {
         this.supplier = supplier;
     }
 

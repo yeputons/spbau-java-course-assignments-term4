@@ -13,7 +13,7 @@ class SingletonLazy<T> implements Lazy<T> {
     //    the monitor)
     private T result;
 
-    public SingletonLazy(Supplier<T> supplier) {
+    SingletonLazy(Supplier<T> supplier) {
         this.supplier = supplier;
     }
 

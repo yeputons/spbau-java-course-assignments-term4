@@ -3,7 +3,7 @@ package ru.spbau.mit;
 import java.util.concurrent.atomic.AtomicReferenceFieldUpdater;
 import java.util.function.Supplier;
 
-public class LockFreeLazy<T> implements Lazy<T> {
+class LockFreeLazy<T> implements Lazy<T> {
     private volatile Supplier<T> supplier;
     private volatile Object result = RESULT_UNINITIALIZED;
 
@@ -11,7 +11,7 @@ public class LockFreeLazy<T> implements Lazy<T> {
     private static final AtomicReferenceFieldUpdater<LockFreeLazy, Object> RESULT_UPDATER =
             AtomicReferenceFieldUpdater.newUpdater(LockFreeLazy.class, Object.class, "result");
 
-    public LockFreeLazy(Supplier<T> supplier) {
+    LockFreeLazy(Supplier<T> supplier) {
         this.supplier = supplier;
     }
 
