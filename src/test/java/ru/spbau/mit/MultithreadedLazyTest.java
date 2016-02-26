@@ -14,6 +14,24 @@ import java.util.function.Supplier;
 
 import static org.junit.Assert.*;
 
+/**
+ * There are three tests for each factory, each test is characterized with a strategy for Lazy object: on
+ * first several calls it return nulls, and afterwards it returns different integers.
+ * There are three strategies: no nulls (checks basic case), ten nulls in the beginning (checks nulls handling)
+ * and a single null in the beginning (checks races between nulls and non-nulls).
+ *
+ * Each test is run for <code>TEST_REPEATS</code> times. The <code>test</code> method is the one who
+ * prepares the test and calls <code>runThreads</code> method which creates threads and performs calculations,
+ * then control goes back to the <code>test</code> method which checks results for correctness.
+ *
+ * During each test <code>THREADS_COUNT</code> threads are created and <code>LAZIES_COUNT</code> distinct
+ * lazy expressions are created. Then all threads are started and each of them tries to calculate value of
+ * each lazy expression. Results are stored into 2D-array which is returned by<code>runThreads</code>.
+ * <code>results[i][j]</code> is what i-th thread received as an answer from j-th lazy object.
+ *
+ * After all threads are finished we check that for every lazy all results collected by different threads
+ * are equal. For singleton lazy we also check that each lazy object has been evaluated at most once.
+ */
 @RunWith(Parameterized.class)
 public class MultithreadedLazyTest {
     @Parameterized.Parameters
