@@ -32,8 +32,9 @@ public class MultithreadedLazyTest {
         this.shouldComputeExactlyOnce = shouldComputeExactlyOnce;
     }
 
-    private static final int THREADS_COUNT = 2000;
-    private static final int LAZIES_COUNT = 2000;
+    private static final int THREADS_COUNT = 1000;
+    private static final int LAZIES_COUNT = 1000;
+    private static final int TEST_REPEATS = 20;
 
     private Integer[][] runThreads(TestSupplier[] suppliers) throws InterruptedException {
         final TestThread[] ths = new TestThread[THREADS_COUNT];
@@ -95,18 +96,24 @@ public class MultithreadedLazyTest {
 
     @Test
     public void testComputation() throws InterruptedException {
-        test(TestSupplier::new, false);
+        for (int i = 0; i < TEST_REPEATS; i++) {
+            test(TestSupplier::new, false);
+        }
     }
 
     @Test
     public void testNullFirstTen() throws InterruptedException {
-        //CHECKSTYLE.OFF: MagicNumber
-        test(() -> new TestSupplier(10), true);
-        //CHECKSTYLE.ON: MagicNumberr
+        for (int i = 0; i < TEST_REPEATS; i++) {
+            //CHECKSTYLE.OFF: MagicNumber
+            test(() -> new TestSupplier(10), true);
+            //CHECKSTYLE.ON: MagicNumberr
+        }
     }
 
     @Test
     public void testNullFirst() throws InterruptedException {
-        test(() -> new TestSupplier(1), true);
+        for (int i = 0; i < TEST_REPEATS; i++) {
+            test(() -> new TestSupplier(1), true);
+        }
     }
 }
