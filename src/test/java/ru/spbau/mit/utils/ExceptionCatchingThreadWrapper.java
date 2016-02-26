@@ -2,15 +2,15 @@ package ru.spbau.mit.utils;
 
 import static org.junit.Assert.*;
 
-public abstract class TestThread {
+public abstract class ExceptionCatchingThreadWrapper {
     private final Thread t;
     private Exception uncaughtException;
 
-    public TestThread() {
+    public ExceptionCatchingThreadWrapper() {
         t = new Thread(new Runnable() {
             public void run() {
                 try {
-                    TestThread.this.run();
+                    ExceptionCatchingThreadWrapper.this.run();
                 } catch (Exception e) {
                     e.printStackTrace();
                     uncaughtException = e;

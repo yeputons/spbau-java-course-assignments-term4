@@ -5,7 +5,7 @@ import ru.spbau.mit.utils.TestSupplier;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
-import ru.spbau.mit.utils.TestThread;
+import ru.spbau.mit.utils.ExceptionCatchingThreadWrapper;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -55,7 +55,7 @@ public class MultithreadedLazyTest {
     private static final int TEST_REPEATS = 20;
 
     private Integer[][] runThreads(TestSupplier[] suppliers) throws InterruptedException {
-        final TestThread[] ths = new TestThread[THREADS_COUNT];
+        final ExceptionCatchingThreadWrapper[] ths = new ExceptionCatchingThreadWrapper[THREADS_COUNT];
 
         final ArrayList<Lazy<Integer>> lazies = new ArrayList<>();
         final Integer[][] results = new Integer[ths.length][LAZIES_COUNT];
@@ -66,7 +66,7 @@ public class MultithreadedLazyTest {
 
         for (int i = 0; i < ths.length; i++) {
             final int id = i;
-            ths[i] = new TestThread() {
+            ths[i] = new ExceptionCatchingThreadWrapper() {
                 @Override
                 public void run() throws Exception {
                     for (int lazy = 0; lazy < LAZIES_COUNT; lazy++) {
@@ -79,10 +79,10 @@ public class MultithreadedLazyTest {
         for (TestSupplier s : suppliers) {
             assertEquals(0, s.getCallsCount());
         }
-        for (TestThread th : ths) {
+        for (ExceptionCatchingThreadWrapper th : ths) {
             th.start();
         }
-        for (TestThread th : ths) {
+        for (ExceptionCatchingThreadWrapper th : ths) {
             th.join();
         }
         return results;
