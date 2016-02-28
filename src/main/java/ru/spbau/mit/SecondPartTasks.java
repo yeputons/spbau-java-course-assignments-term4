@@ -64,7 +64,7 @@ public final class SecondPartTasks {
         orders.stream()
                 .flatMap(m -> m.entrySet().stream())
                 .forEach(
-                        e -> result.merge(e.getKey(), e.getValue(), (a, b) -> a + b)
+                        e -> result.merge(e.getKey(), e.getValue(), Integer::sum)
                 );
         return result;
     }
