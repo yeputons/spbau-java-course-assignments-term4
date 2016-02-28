@@ -59,12 +59,12 @@ public final class SecondPartTasks {
     // Вы крупный поставщик продуктов. Каждая торговая сеть делает вам заказ в виде Map<Товар, Количество>.
     // Необходимо вычислить, какой товар и в каком количестве надо поставить.
     public static Map<String, Integer> calculateGlobalOrder(List<Map<String, Integer>> orders) {
-        final Map<String, Integer> result = new HashMap<>();
-        orders.stream()
+        return orders.stream()
                 .flatMap(m -> m.entrySet().stream())
-                .forEach(
-                        e -> result.merge(e.getKey(), e.getValue(), Integer::sum)
-                );
-        return result;
+                .collect(Collectors.toMap(
+                        Map.Entry::getKey,
+                        Map.Entry::getValue,
+                        Integer::sum
+                ));
     }
 }
