@@ -5,7 +5,6 @@ import org.junit.rules.TemporaryFolder;
 
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.OpenOption;
 import java.nio.file.Path;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -92,11 +91,13 @@ public class SecondPartTasksTest {
         expected.put("Pineapples", 32);
         expected.put("", 64 + 128);
         expected.put("Something", 256);
-        assertEquals(expected, SecondPartTasks.calculateGlobalOrder(Arrays.asList(order1, order2, order3, order4, order5, order6)));
+        assertEquals(expected, SecondPartTasks.calculateGlobalOrder(Arrays.asList(order1, order2, order3, order4,
+                order5, order6)));
 
         expected.put("Something", 512);
         // repeat one order twice
-        assertEquals(expected, SecondPartTasks.calculateGlobalOrder(Arrays.asList(order1, order2, order3, order4, order5, order6, order6)));
+        assertEquals(expected, SecondPartTasks.calculateGlobalOrder(Arrays.asList(order1, order2, order3, order4,
+                order5, order6, order6)));
 
         // empty order only
         assertEquals(new HashMap<>(), SecondPartTasks.calculateGlobalOrder(Arrays.asList(order4)));
