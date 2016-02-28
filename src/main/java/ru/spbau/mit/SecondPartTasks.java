@@ -28,8 +28,8 @@ public final class SecondPartTasks {
 
     // В квадрат с длиной стороны 1 вписана мишень.
     // Стрелок атакует мишень и каждый раз попадает в произвольную точку квадрата.
-    // Надо промоделировать этот процесс с помощью класса java.util.Random и
-    // посчитать, какова вероятность попасть в мишень.
+    // Надо промоделировать этот процесс с помощью класса java.util.Random и посчитать,
+    // какова вероятность попасть в мишень.
     private static final int MONTE_CARLO_ITERATIONS = 1000000;
     public static double piDividedBy4() {
         Random rnd = new Random();
