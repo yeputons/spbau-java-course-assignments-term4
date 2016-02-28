@@ -1,5 +1,3 @@
-//CHECKSTYLE.OFF: MagicNumber
-//CHECKSTYLE.OFF: LineLength
 package ru.spbau.mit;
 
 
