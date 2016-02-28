@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -45,27 +46,14 @@ public final class SecondPartTasks {
     // Надо вычислить, чья общая длина произведений наибольшая.
     public static String findPrinter(Map<String, List<String>> compositions) {
         return compositions.entrySet().stream()
-                .map(e -> new HashMap.Entry<String, Long>() {
-                    private final Long sumLength =
-                            e.getValue().stream()
-                                    .collect(Collectors.summarizingInt(String::length)).getSum();
-
-                    @Override
-                    public String getKey() {
-                        return e.getKey();
-                    }
-
-                    @Override
-                    public Long getValue() {
-                        return sumLength;
-                    }
-
-                    @Override
-                    public Long setValue(Long value) {
-                        throw new UnsupportedOperationException();
-                    }
-                })
-                .max((a, b) -> Long.compare(a.getValue(), b.getValue()))
+                .collect(Collectors.toMap(
+                        Map.Entry::getKey,
+                        v -> v.getValue().stream().collect(
+                                Collectors.summarizingInt(String::length)
+                        ).getSum()
+                ))
+                .entrySet().stream()
+                .max(Map.Entry.comparingByValue())
                 .get().getKey();
     }
 
