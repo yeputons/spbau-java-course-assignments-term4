@@ -1,6 +1,5 @@
 package ru.spbau.mit;
 
-import java.awt.geom.Point2D;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -36,10 +35,10 @@ public final class SecondPartTasks {
     public static double piDividedBy4() {
         Random rnd = new Random();
         return Stream.generate(
-                    () -> new Point2D.Double(rnd.nextDouble(), rnd.nextDouble())
+                    () -> Math.pow(rnd.nextDouble(), 2) + Math.pow(rnd.nextDouble(), 2)
                 )
                 .limit(MONTE_CARLO_ITERATIONS)
-                .collect(Collectors.averagingInt(p -> p.distance(0, 0) <= 1 ? 1 : 0));
+                .collect(Collectors.averagingInt(d -> d <= 1 ? 1 : 0));
     }
 
     // Дано отображение из имени автора в список с содержанием его произведений.
