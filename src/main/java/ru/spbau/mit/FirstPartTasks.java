@@ -31,7 +31,7 @@ public final class FirstPartTasks {
     public static List<Album> sortedFavorites(Stream<Album> albums) {
         return albums
                 .filter(a -> a.getTracks().stream().anyMatch(t -> t.getRating() > MIN_FAVORITE_RATING))
-                .sorted((a, b) -> a.getName().compareTo(b.getName()))
+                .sorted(Comparator.comparing(Album::getName))
                 .collect(Collectors.toList());
     }
 
@@ -58,17 +58,18 @@ public final class FirstPartTasks {
     // Альбом в котором максимум рейтинга минимален
     // (если в альбоме нет ни одного трека, считать, что максимум рейтинга в нем --- 0)
     public static Optional<Album> minMaxRating(Stream<Album> albums) {
-        Function<Album, Integer> getAlbumRating =
-                a -> a.getTracks().stream().map(Track::getRating).max(Integer::compare).orElse(0);
-        return albums.min((a, b) -> Integer.compare(getAlbumRating.apply(a), getAlbumRating.apply(b)));
+        return albums.min(Comparator.comparingInt(
+                a -> a.getTracks().stream().map(Track::getRating).max(Integer::compare).orElse(0)
+        ));
     }
 
     // Список альбомов, отсортированный по убыванию среднего рейтинга его треков (0, если треков нет)
     public static List<Album> sortByAverageRating(Stream<Album> albums) {
-        Function<Album, Double> getAlbumRating =
-                a -> a.getTracks().stream().collect(Collectors.averagingInt(Track::getRating));
         return albums
-                .sorted((a, b) -> -Double.compare(getAlbumRating.apply(a), getAlbumRating.apply(b)))
+                .sorted(Comparator.comparingDouble(
+                        // Explicit type in lambda because of http://stackoverflow.com/a/25173599/767632
+                        (Album a) -> a.getTracks().stream().collect(Collectors.averagingInt(Track::getRating))
+                ).reversed())
                 .collect(Collectors.toList());
     }
 
