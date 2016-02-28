@@ -50,9 +50,13 @@ public final class FirstPartTasks {
 
     // Число повторяющихся альбомов в потоке
     public static long countAlbumDuplicates(Stream<Album> albums) {
-        HashSet<Album> distinct = new HashSet<>();
-        long total = albums.peek(distinct::add).count();
-        return total - distinct.size();
+        return albums.collect(Collectors.groupingBy(
+                        Function.identity(),
+                        Collectors.counting()
+                ))
+                .values().stream()
+                .map(x -> x - 1)
+                .reduce(Long::sum).orElse(0L);
     }
 
     // Альбом в котором максимум рейтинга минимален
