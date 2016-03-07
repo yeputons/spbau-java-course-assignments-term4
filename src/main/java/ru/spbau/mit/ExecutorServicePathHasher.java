@@ -35,7 +35,9 @@ public class ExecutorServicePathHasher extends PathHasher {
                     List<Future<String>> subs =
                             Files.list(path)
                                     .sorted()
-                                    .map(Task::new)
+                                    // Do not use Task::new because of
+                                    // https://bugs.openjdk.java.net/browse/JDK-8044748
+                                    .map(p -> new Task(p))
                                     .map(executorService::submit)
                                     .collect(Collectors.toList());
                     String dirDescription = path.getFileName().toString()
