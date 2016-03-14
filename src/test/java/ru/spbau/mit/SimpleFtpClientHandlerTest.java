@@ -70,7 +70,7 @@ public class SimpleFtpClientHandlerTest {
     public void testSubdirectoryList() throws IOException {
         runTest((c) -> {
             c.writeInt(1);
-            c.writeUTF("yfolder/../zfolder");
+            c.writeUTF("afolder/../zfolder");
         }, (c) -> {
             c.writeInt(1);
             c.writeUTF("test3.txt");
@@ -132,11 +132,11 @@ public class SimpleFtpClientHandlerTest {
     public void testMultipleCommands() throws IOException {
         runTest((c) -> {
             c.writeInt(1);
-            c.writeUTF("yfolder/");
+            c.writeUTF("afolder/");
             c.writeInt(2);
             c.writeUTF("test1.txt");
             c.writeInt(2);
-            c.writeUTF("zfolder/tesьt3.txt");
+            c.writeUTF("zfolder/test3.txt");
             c.writeInt(1);
             c.writeUTF("zfolder");
         }, (c) -> {
