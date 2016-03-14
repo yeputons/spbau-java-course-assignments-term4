@@ -6,28 +6,20 @@ import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 
 import java.io.*;
-import java.net.Socket;
 import java.nio.file.Files;
-
-import static ru.spbau.mit.BytesProvider.getBytes;
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.*;
 
 public class SimpleFtpClientHandlerTest {
     @Rule
     public TemporaryFolder temporaryFolder = new TemporaryFolder();
 
     private void runTest(BytesProvider commandsToSend, BytesProvider expected) throws IOException {
-        ByteArrayInputStream in = new ByteArrayInputStream(getBytes(commandsToSend));
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
-
-        Socket socket = mock(Socket.class);
-        when(socket.getInputStream()).thenReturn(in);
-        when(socket.getOutputStream()).thenReturn(out);
-        new SimpleFtpClientHandler(temporaryFolder.getRoot().toPath(), socket).run();
-        verify(socket, times(1)).close();
-
-        assertArrayEquals(getBytes(expected), out.toByteArray());
+        SocketTestUtils.checkSocketIO(
+                commandsToSend,
+                (s) -> {
+                    new SimpleFtpClientHandler(temporaryFolder.getRoot().toPath(), s).run();
+                },
+                expected
+        );
     }
 
     @Before
