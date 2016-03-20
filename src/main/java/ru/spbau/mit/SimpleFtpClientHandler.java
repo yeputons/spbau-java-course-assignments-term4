@@ -40,6 +40,10 @@ class SimpleFtpClientHandler implements Runnable {
 
     private void handleGet() throws IOException {
         Path file = rootPath.resolve(in.readUTF());
+        if (Files.isDirectory(file)) {
+            out.writeInt(0);
+            return;
+        }
         try (InputStream fin = Files.newInputStream(file)) {
             out.writeInt((int) Files.size(file));
             IOUtils.copyLarge(fin, out);
