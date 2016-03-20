@@ -50,6 +50,7 @@ public class TestsTester extends ParentRunner<Class> {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     protected Description describeChild(Class aClass) {
         return Description.createTestDescription(aClass.getSimpleName(),
                 aClass.getAnnotation(ShouldSucceed.class) != null ? "shouldSucceed" : "shouldFail"
@@ -57,6 +58,7 @@ public class TestsTester extends ParentRunner<Class> {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     protected void runChild(Class aClass, RunNotifier runNotifier) {
         Description d = describeChild(aClass);
         runNotifier.fireTestStarted(d);
