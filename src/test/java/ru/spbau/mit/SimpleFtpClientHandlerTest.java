@@ -121,32 +121,4 @@ public class SimpleFtpClientHandlerTest {
             c.writeInt(0);
         });
     }
-
-    @Test
-    public void testMultipleCommands() throws IOException {
-        runTest((c) -> {
-            c.writeInt(1);
-            c.writeUTF("afolder/");
-            c.writeInt(2);
-            c.writeUTF("test1.txt");
-            c.writeInt(2);
-            c.writeUTF("zfolder/test3.txt");
-            c.writeInt(1);
-            c.writeUTF("zfolder");
-        }, (c) -> {
-            c.writeInt(0);
-
-            final byte[] expectedTest1 = "Contents of test1".getBytes();
-            c.writeInt(expectedTest1.length);
-            c.write(expectedTest1);
-
-            final byte[] expectedTest3 = "Contents of test3".getBytes();
-            c.writeInt(expectedTest3.length);
-            c.write(expectedTest3);
-
-            c.writeInt(1);
-            c.writeUTF("test3.txt");
-            c.writeBoolean(false);
-        });
-    }
 }

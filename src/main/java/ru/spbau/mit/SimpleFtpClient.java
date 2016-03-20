@@ -3,12 +3,14 @@ package ru.spbau.mit;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.Socket;
 
 public class SimpleFtpClient implements AutoCloseable {
     private final Socket socket;
     private DataInputStream in;
     private DataOutputStream out;
+    private boolean commandWasHandled = false;
 
     public SimpleFtpClient(String host, int port) throws IOException {
         this(new Socket(host, port));
@@ -31,6 +33,10 @@ public class SimpleFtpClient implements AutoCloseable {
     }
 
     public DirectoryItem[] list(String path) throws IOException {
+        if (commandWasHandled) {
+            throw new IllegalStateException("Cannot handle more than one command per connection");
+        }
+        commandWasHandled = true;
         out.writeInt(1);
         out.writeUTF(path);
         int count = in.readInt();
@@ -43,16 +49,15 @@ public class SimpleFtpClient implements AutoCloseable {
         return result;
     }
 
-    public byte[] get(String path) throws IOException {
+    public InputStream get(String path) throws IOException {
+        if (commandWasHandled) {
+            throw new IllegalStateException("Cannot handle more than one command per connection");
+        }
+        commandWasHandled = true;
         out.writeInt(2);
         out.writeUTF(path);
         int length = in.readInt();
-        byte[] result = new byte[length];
-        int position = 0;
-        while (position < result.length) {
-            position += in.read(result, position, result.length - position);
-        }
-        return result;
+        return in;
     }
 
     @Override

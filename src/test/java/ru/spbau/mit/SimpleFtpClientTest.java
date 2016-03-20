@@ -1,5 +1,6 @@
 package ru.spbau.mit;
 
+import org.apache.commons.io.IOUtils;
 import org.junit.Test;
 
 import java.io.DataOutputStream;
@@ -47,7 +48,7 @@ public class SimpleFtpClientTest {
             ans.write(contents, 0, contents.length);
         }, (s) -> {
             try (SimpleFtpClient client = new SimpleFtpClient(s)) {
-                assertArrayEquals(contents, client.get("some-file"));
+                assertArrayEquals(contents, IOUtils.toByteArray(client.get("some-file")));
             }
         }, (DataOutputStream command) -> {
             command.writeInt(2);
