@@ -101,8 +101,8 @@ public class SimpleFtpClientHandlerTest {
             c.writeInt(0);
         });
     }
-    @Test
 
+    @Test
     public void testGetNonExistingFile() throws IOException {
         runTest((c) -> {
             c.writeInt(2);
@@ -112,6 +112,7 @@ public class SimpleFtpClientHandlerTest {
         });
     }
 
+    @Test
     public void testGetDirectory() throws IOException {
         runTest((c) -> {
             c.writeInt(2);
@@ -121,6 +122,7 @@ public class SimpleFtpClientHandlerTest {
         });
     }
 
+    @Test
     public void testMultipleCommands() throws IOException {
         runTest((c) -> {
             c.writeInt(1);
