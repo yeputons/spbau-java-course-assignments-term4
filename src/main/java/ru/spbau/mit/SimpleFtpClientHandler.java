@@ -43,7 +43,7 @@ class SimpleFtpClientHandler implements Runnable {
         try (InputStream fin = Files.newInputStream(file)) {
             out.writeInt((int) Files.size(file));
             IOUtils.copyLarge(fin, out);
-        } catch (NoSuchFileException | UnsupportedOperationException e) {
+        } catch (NoSuchFileException | UnsupportedOperationException | AccessDeniedException e) {
             out.writeInt(0);
         }
     }
