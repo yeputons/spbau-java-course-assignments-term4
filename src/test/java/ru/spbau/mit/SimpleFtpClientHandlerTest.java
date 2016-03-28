@@ -18,7 +18,7 @@ public class SimpleFtpClientHandlerTest {
             ) throws IOException {
         SocketTestUtils.checkSocketIO(
                 commandsWriter,
-                (socket) -> {
+                socket -> {
                     new SimpleFtpClientHandler(temporaryFolder.getRoot().toPath(), socket).run();
                 },
                 expectedAnswersWriter
@@ -37,16 +37,16 @@ public class SimpleFtpClientHandlerTest {
     @Test
     public void testBadCommand() throws IOException {
         // CHECKSTYLE.OFF: MagicNumber
-        runTest((commands) -> commands.writeInt(3), (c) -> { });
+        runTest(commands -> commands.writeInt(3), expected -> { });
         // CHECKSTYLE.ON: MagicNumber
     }
 
     @Test
     public void testDirectoryList() throws IOException {
-        runTest((commands) -> {
+        runTest(commands -> {
             commands.writeInt(1);
             commands.writeUTF(".");
-        }, (expected) -> {
+        }, expected -> {
             // CHECKSTYLE.OFF: MagicNumber
             expected.writeInt(4);
             // CHECKSTYLE.ON: MagicNumber
@@ -63,10 +63,10 @@ public class SimpleFtpClientHandlerTest {
 
     @Test
     public void testSubdirectoryList() throws IOException {
-        runTest((commands) -> {
+        runTest(commands -> {
             commands.writeInt(1);
             commands.writeUTF("afolder/../zfolder");
-        }, (expected) -> {
+        }, expected -> {
             expected.writeInt(1);
             expected.writeUTF("test3.txt");
             expected.writeBoolean(false);
@@ -75,10 +75,10 @@ public class SimpleFtpClientHandlerTest {
 
     @Test
     public void testFileContents() throws IOException {
-        runTest((commands) -> {
+        runTest(commands -> {
             commands.writeInt(2);
             commands.writeUTF("zfolder/test3.txt");
-        }, (expected) -> {
+        }, expected -> {
             final byte[] expectedStr = "Contents of test3".getBytes();
             expected.writeInt(expectedStr.length);
             expected.write(expectedStr);
@@ -87,40 +87,40 @@ public class SimpleFtpClientHandlerTest {
 
     @Test
     public void testListNonExistingDirectory() throws IOException {
-        runTest((commands) -> {
+        runTest(commands -> {
             commands.writeInt(1);
             commands.writeUTF("badfolder");
-        }, (expected) -> {
+        }, expected -> {
             expected.writeInt(0);
         });
     }
 
     @Test
     public void testListFile() throws IOException {
-        runTest((commands) -> {
+        runTest(commands -> {
             commands.writeInt(1);
             commands.writeUTF("test1.txt");
-        }, (expected) -> {
+        }, expected -> {
             expected.writeInt(0);
         });
     }
 
     @Test
     public void testGetNonExistingFile() throws IOException {
-        runTest((commands) -> {
+        runTest(commands -> {
             commands.writeInt(2);
             commands.writeUTF("badfile");
-        }, (expected) -> {
+        }, expected -> {
             expected.writeInt(0);
         });
     }
 
     @Test
     public void testGetDirectory() throws IOException {
-        runTest((commands) -> {
+        runTest(commands -> {
             commands.writeInt(2);
             commands.writeUTF("zfolder");
-        }, (expected) -> {
+        }, expected -> {
             expected.writeInt(0);
         });
     }
