@@ -9,12 +9,20 @@ import static org.junit.Assert.*;
 public final class SocketTestUtils {
     private SocketTestUtils() {}
 
+    static byte[] getBytes(ThrowingConsumer<DataOutputStream, IOException> streamWriter) throws IOException {
+        ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+        DataOutputStream stream = new DataOutputStream(buffer);
+        streamWriter.consume(stream);
+        buffer.close();
+        return buffer.toByteArray();
+    }
+
     static void checkSocketIO(
-            BytesProvider toSend,
+            ThrowingConsumer<DataOutputStream, IOException> inputWriter,
             ThrowingConsumer<Socket, IOException> testedCode,
-            BytesProvider toReceive)
+            ThrowingConsumer<DataOutputStream, IOException> expectedOutputWriter)
             throws IOException {
-        ByteArrayInputStream in = new ByteArrayInputStream(BytesProvider.getBytes(toSend));
+        ByteArrayInputStream in = new ByteArrayInputStream(getBytes(inputWriter));
         ByteArrayOutputStream out = new ByteArrayOutputStream();
 
         Socket socket = mock(Socket.class);
@@ -23,7 +31,7 @@ public final class SocketTestUtils {
         testedCode.consume(socket);
         verify(socket, times(1)).close();
 
-        byte[] expected = BytesProvider.getBytes(toReceive);
+        byte[] expected = getBytes(expectedOutputWriter);
         assertArrayEquals(expected, out.toByteArray());
     }
 }

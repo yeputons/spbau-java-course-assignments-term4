@@ -12,13 +12,16 @@ public class SimpleFtpClientHandlerTest {
     @Rule
     public TemporaryFolder temporaryFolder = new TemporaryFolder();
 
-    private void runTest(BytesProvider commandsToSend, BytesProvider expected) throws IOException {
+    private void runTest(
+            ThrowingConsumer<DataOutputStream, IOException> commandsWriter,
+            ThrowingConsumer<DataOutputStream, IOException> expectedAnswersWriter
+            ) throws IOException {
         SocketTestUtils.checkSocketIO(
-                commandsToSend,
+                commandsWriter,
                 (s) -> {
                     new SimpleFtpClientHandler(temporaryFolder.getRoot().toPath(), s).run();
                 },
-                expected
+                expectedAnswersWriter
         );
     }
 
