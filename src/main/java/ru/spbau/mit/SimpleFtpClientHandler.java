@@ -13,43 +13,12 @@ class SimpleFtpClientHandler implements Runnable {
     private final Path rootPath;
     private final Socket client;
 
-    SimpleFtpClientHandler(Path rootPath, Socket client) {
-        this.rootPath = rootPath;
-        this.client = client;
-    }
-
     private DataInputStream in;
     private DataOutputStream out;
 
-    private void handleList() throws IOException {
-        Path dir = rootPath.resolve(in.readUTF());
-        if (!Files.isDirectory(dir)) {
-            out.writeInt(0);
-            return;
-        }
-        List<Path> content =
-                Files.list(dir)
-                        .sorted(Comparator.comparing(Path::getFileName))
-                        .collect(Collectors.toList());
-        out.writeInt(content.size());
-        for (Path inside : content) {
-            out.writeUTF(inside.getFileName().toString());
-            out.writeBoolean(Files.isDirectory(inside));
-        }
-    }
-
-    private void handleGet() throws IOException {
-        Path file = rootPath.resolve(in.readUTF());
-        if (Files.isDirectory(file)) {
-            out.writeInt(0);
-            return;
-        }
-        try (InputStream fin = Files.newInputStream(file)) {
-            out.writeInt((int) Files.size(file));
-            IOUtils.copyLarge(fin, out);
-        } catch (NoSuchFileException | UnsupportedOperationException | AccessDeniedException e) {
-            out.writeInt(0);
-        }
+    SimpleFtpClientHandler(Path rootPath, Socket client) {
+        this.rootPath = rootPath;
+        this.client = client;
     }
 
     @Override
@@ -105,6 +74,37 @@ class SimpleFtpClientHandler implements Runnable {
                     e.printStackTrace();
                 }
             }
+        }
+    }
+
+    private void handleList() throws IOException {
+        Path dir = rootPath.resolve(in.readUTF());
+        if (!Files.isDirectory(dir)) {
+            out.writeInt(0);
+            return;
+        }
+        List<Path> content =
+                Files.list(dir)
+                        .sorted(Comparator.comparing(Path::getFileName))
+                        .collect(Collectors.toList());
+        out.writeInt(content.size());
+        for (Path inside : content) {
+            out.writeUTF(inside.getFileName().toString());
+            out.writeBoolean(Files.isDirectory(inside));
+        }
+    }
+
+    private void handleGet() throws IOException {
+        Path file = rootPath.resolve(in.readUTF());
+        if (Files.isDirectory(file)) {
+            out.writeInt(0);
+            return;
+        }
+        try (InputStream fin = Files.newInputStream(file)) {
+            out.writeInt((int) Files.size(file));
+            IOUtils.copyLarge(fin, out);
+        } catch (NoSuchFileException | UnsupportedOperationException | AccessDeniedException e) {
+            out.writeInt(0);
         }
     }
 }
