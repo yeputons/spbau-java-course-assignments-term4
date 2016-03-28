@@ -6,7 +6,7 @@ import java.net.Socket;
 import static org.mockito.Mockito.*;
 import static org.junit.Assert.*;
 
-public final class SocketTestUtils {
+final class SocketTestUtils {
     private SocketTestUtils() {}
 
     static byte[] getBytes(ThrowingConsumer<DataOutputStream, IOException> streamWriter) throws IOException {
