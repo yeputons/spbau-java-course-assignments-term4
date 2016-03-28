@@ -3,7 +3,6 @@ package ru.spbau.mit;
 import org.apache.commons.io.IOUtils;
 import org.junit.Test;
 
-import java.io.DataOutputStream;
 import java.io.IOException;
 
 import static org.junit.Assert.*;
@@ -11,27 +10,27 @@ import static org.junit.Assert.*;
 public class SimpleFtpClientTest {
     @Test
     public void testList() throws IOException {
-        SocketTestUtils.checkSocketIO((ans) -> {
+        SocketTestUtils.checkSocketIO((answerWith) -> {
             // CHECKSTYLE.OFF: MagicNumber
-            ans.writeInt(3);
+            answerWith.writeInt(3);
             // CHECKSTYLE.ON: MagicNumber
-            ans.writeUTF("file2");
-            ans.writeBoolean(false);
-            ans.writeUTF("dir");
-            ans.writeBoolean(true);
-            ans.writeUTF("file3");
-            ans.writeBoolean(false);
-        }, (s) -> {
-            try (SimpleFtpClient client = new SimpleFtpClient(s)) {
+            answerWith.writeUTF("file2");
+            answerWith.writeBoolean(false);
+            answerWith.writeUTF("dir");
+            answerWith.writeBoolean(true);
+            answerWith.writeUTF("file3");
+            answerWith.writeBoolean(false);
+        }, (socket) -> {
+            try (SimpleFtpClient client = new SimpleFtpClient(socket)) {
                 assertArrayEquals(new DirectoryItem[]{
                         new DirectoryItem("file2", false),
                         new DirectoryItem("dir", true),
                         new DirectoryItem("file3", false)
                 }, client.list("some-dir"));
             }
-        }, (DataOutputStream command) -> {
-            command.writeInt(1);
-            command.writeUTF("some-dir");
+        }, (expectedCommand) -> {
+            expectedCommand.writeInt(1);
+            expectedCommand.writeUTF("some-dir");
         });
     }
 
@@ -43,16 +42,16 @@ public class SimpleFtpClientTest {
         for (int i = 0; i < contents.length; i++) {
             contents[i] = (byte) (i * i * i);
         }
-        SocketTestUtils.checkSocketIO((ans) -> {
-            ans.writeInt(contents.length);
-            ans.write(contents, 0, contents.length);
-        }, (s) -> {
-            try (SimpleFtpClient client = new SimpleFtpClient(s)) {
+        SocketTestUtils.checkSocketIO((answerWith) -> {
+            answerWith.writeInt(contents.length);
+            answerWith.write(contents, 0, contents.length);
+        }, (socket) -> {
+            try (SimpleFtpClient client = new SimpleFtpClient(socket)) {
                 assertArrayEquals(contents, IOUtils.toByteArray(client.get("some-file")));
             }
-        }, (DataOutputStream command) -> {
-            command.writeInt(2);
-            command.writeUTF("some-file");
+        }, (expectedCommand) -> {
+            expectedCommand.writeInt(2);
+            expectedCommand.writeUTF("some-file");
         });
     }
 }

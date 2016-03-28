@@ -18,8 +18,8 @@ public class SimpleFtpClientHandlerTest {
             ) throws IOException {
         SocketTestUtils.checkSocketIO(
                 commandsWriter,
-                (s) -> {
-                    new SimpleFtpClientHandler(temporaryFolder.getRoot().toPath(), s).run();
+                (socket) -> {
+                    new SimpleFtpClientHandler(temporaryFolder.getRoot().toPath(), socket).run();
                 },
                 expectedAnswersWriter
         );
@@ -37,91 +37,91 @@ public class SimpleFtpClientHandlerTest {
     @Test
     public void testBadCommand() throws IOException {
         // CHECKSTYLE.OFF: MagicNumber
-        runTest((c) -> c.writeInt(3), (c) -> { });
+        runTest((commands) -> commands.writeInt(3), (c) -> { });
         // CHECKSTYLE.ON: MagicNumber
     }
 
     @Test
     public void testDirectoryList() throws IOException {
-        runTest((c) -> {
-            c.writeInt(1);
-            c.writeUTF(".");
-        }, (c) -> {
+        runTest((commands) -> {
+            commands.writeInt(1);
+            commands.writeUTF(".");
+        }, (expected) -> {
             // CHECKSTYLE.OFF: MagicNumber
-            c.writeInt(4);
+            expected.writeInt(4);
             // CHECKSTYLE.ON: MagicNumber
-            c.writeUTF("afolder");
-            c.writeBoolean(true);
-            c.writeUTF("test1.txt");
-            c.writeBoolean(false);
-            c.writeUTF("test2.txt");
-            c.writeBoolean(false);
-            c.writeUTF("zfolder");
-            c.writeBoolean(true);
+            expected.writeUTF("afolder");
+            expected.writeBoolean(true);
+            expected.writeUTF("test1.txt");
+            expected.writeBoolean(false);
+            expected.writeUTF("test2.txt");
+            expected.writeBoolean(false);
+            expected.writeUTF("zfolder");
+            expected.writeBoolean(true);
         });
     }
 
     @Test
     public void testSubdirectoryList() throws IOException {
-        runTest((c) -> {
-            c.writeInt(1);
-            c.writeUTF("afolder/../zfolder");
-        }, (c) -> {
-            c.writeInt(1);
-            c.writeUTF("test3.txt");
-            c.writeBoolean(false);
+        runTest((commands) -> {
+            commands.writeInt(1);
+            commands.writeUTF("afolder/../zfolder");
+        }, (expected) -> {
+            expected.writeInt(1);
+            expected.writeUTF("test3.txt");
+            expected.writeBoolean(false);
         });
     }
 
     @Test
     public void testFileContents() throws IOException {
-        runTest((c) -> {
-            c.writeInt(2);
-            c.writeUTF("zfolder/test3.txt");
-        }, (c) -> {
-            final byte[] expected = "Contents of test3".getBytes();
-            c.writeInt(expected.length);
-            c.write(expected);
+        runTest((commands) -> {
+            commands.writeInt(2);
+            commands.writeUTF("zfolder/test3.txt");
+        }, (expected) -> {
+            final byte[] expectedStr = "Contents of test3".getBytes();
+            expected.writeInt(expectedStr.length);
+            expected.write(expectedStr);
         });
     }
 
     @Test
     public void testListNonExistingDirectory() throws IOException {
-        runTest((c) -> {
-            c.writeInt(1);
-            c.writeUTF("badfolder");
-        }, (c) -> {
-            c.writeInt(0);
+        runTest((commands) -> {
+            commands.writeInt(1);
+            commands.writeUTF("badfolder");
+        }, (expected) -> {
+            expected.writeInt(0);
         });
     }
 
     @Test
     public void testListFile() throws IOException {
-        runTest((c) -> {
-            c.writeInt(1);
-            c.writeUTF("test1.txt");
-        }, (c) -> {
-            c.writeInt(0);
+        runTest((commands) -> {
+            commands.writeInt(1);
+            commands.writeUTF("test1.txt");
+        }, (expected) -> {
+            expected.writeInt(0);
         });
     }
 
     @Test
     public void testGetNonExistingFile() throws IOException {
-        runTest((c) -> {
-            c.writeInt(2);
-            c.writeUTF("badfile");
-        }, (c) -> {
-            c.writeInt(0);
+        runTest((commands) -> {
+            commands.writeInt(2);
+            commands.writeUTF("badfile");
+        }, (expected) -> {
+            expected.writeInt(0);
         });
     }
 
     @Test
     public void testGetDirectory() throws IOException {
-        runTest((c) -> {
-            c.writeInt(2);
-            c.writeUTF("zfolder");
-        }, (c) -> {
-            c.writeInt(0);
+        runTest((commands) -> {
+            commands.writeInt(2);
+            commands.writeUTF("zfolder");
+        }, (expected) -> {
+            expected.writeInt(0);
         });
     }
 }
