@@ -9,17 +9,25 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class SimpleFtpServer {
+    private final int port;
     private final Path rootPath;
-    private final Thread listenThread;
-    private final ExecutorService clientThreads;
-    private final ServerSocket serverSocket;
+    private Thread listenThread;
+    private ExecutorService clientThreads;
+    private ServerSocket serverSocket;
 
     public SimpleFtpServer(int port) throws IOException {
         this(port, Paths.get(""));
     }
 
-    public SimpleFtpServer(int port, Path rootPath) throws IOException {
+    public SimpleFtpServer(int port, Path rootPath) {
+        this.port = port;
         this.rootPath = rootPath;
+    }
+
+    public void start() throws IOException {
+        if (serverSocket != null) {
+            throw new IllegalStateException("Server was already started");
+        }
         clientThreads = Executors.newCachedThreadPool();
         serverSocket = new ServerSocket(port);
         listenThread = new Thread(new ListenRunnable());
@@ -53,6 +61,9 @@ public class SimpleFtpServer {
      * unclosed connections are still processed
      */
     public void shutdown() throws InterruptedException {
+        if (serverSocket == null) {
+            throw new IllegalStateException("Server was not started");
+        }
         try {
             if (!serverSocket.isClosed()) {
                 serverSocket.close();

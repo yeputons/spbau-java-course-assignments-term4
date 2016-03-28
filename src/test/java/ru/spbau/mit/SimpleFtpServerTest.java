@@ -23,6 +23,7 @@ public class SimpleFtpServerTest {
 
         final int port = 12345;
         SimpleFtpServer server = new SimpleFtpServer(port, temporaryFolder.getRoot().toPath());
+        server.start();
         try {
             Socket s0 = new Socket("localhost", port);
             Socket s1 = new Socket("localhost", port);
