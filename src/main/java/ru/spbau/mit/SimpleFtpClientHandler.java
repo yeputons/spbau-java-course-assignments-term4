@@ -9,6 +9,9 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static ru.spbau.mit.SimpleFtpProtocol.*;
+import static ru.spbau.mit.SimpleFtpProtocol.COMMAND_GET;
+
 class SimpleFtpClientHandler implements Runnable {
     private final Path rootPath;
     private final Socket client;
@@ -29,10 +32,10 @@ class SimpleFtpClientHandler implements Runnable {
             while (true) {
                 int command = in.readInt();
                 switch (command) {
-                    case 1:
+                    case COMMAND_LIST:
                         handleList();
                         break;
-                    case 2:
+                    case COMMAND_GET:
                         handleGet();
                         break;
                     default:

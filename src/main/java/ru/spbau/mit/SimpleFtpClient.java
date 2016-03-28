@@ -6,6 +6,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.Socket;
 
+import static ru.spbau.mit.SimpleFtpProtocol.COMMAND_GET;
+import static ru.spbau.mit.SimpleFtpProtocol.COMMAND_LIST;
+
 public class SimpleFtpClient implements AutoCloseable {
     private final Socket socket;
     private DataInputStream in;
@@ -37,7 +40,7 @@ public class SimpleFtpClient implements AutoCloseable {
             throw new IllegalStateException("Cannot handle more than one command per connection");
         }
         commandWasHandled = true;
-        out.writeInt(1);
+        out.writeInt(COMMAND_LIST);
         out.writeUTF(path);
         int count = in.readInt();
         DirectoryItem[] result = new DirectoryItem[count];
@@ -54,7 +57,7 @@ public class SimpleFtpClient implements AutoCloseable {
             throw new IllegalStateException("Cannot handle more than one command per connection");
         }
         commandWasHandled = true;
-        out.writeInt(2);
+        out.writeInt(COMMAND_GET);
         out.writeUTF(path);
         int length = in.readInt();
         return in;
