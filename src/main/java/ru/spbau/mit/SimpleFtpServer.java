@@ -60,16 +60,12 @@ public class SimpleFtpServer {
      * Stops accepting new connections and closes socket,
      * unclosed connections are still processed
      */
-    public void shutdown() throws InterruptedException {
+    public void shutdown() throws InterruptedException, IOException {
         if (serverSocket == null) {
             throw new IllegalStateException("Server was not started");
         }
-        try {
-            if (!serverSocket.isClosed()) {
-                serverSocket.close();
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
+        if (!serverSocket.isClosed()) {
+            serverSocket.close();
         }
         listenThread.interrupt();
         listenThread.join();

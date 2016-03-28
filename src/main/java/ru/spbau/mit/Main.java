@@ -17,7 +17,7 @@ public final class Main {
                 public void run() {
                     try {
                         server.shutdown();
-                    } catch (InterruptedException e) {
+                    } catch (InterruptedException | IOException e) {
                         e.printStackTrace();
                     }
                 }
