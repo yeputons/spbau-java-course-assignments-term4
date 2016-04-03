@@ -7,6 +7,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 public class SimpleFtpServer {
     private final int port;
@@ -60,7 +61,7 @@ public class SimpleFtpServer {
      * Stops accepting new connections and closes socket,
      * unclosed connections are still processed
      */
-    public void shutdown() throws InterruptedException, IOException {
+    public void shutdown() throws IOException {
         if (serverSocket == null) {
             throw new IllegalStateException("Server was not started");
         }
@@ -68,7 +69,11 @@ public class SimpleFtpServer {
             serverSocket.close();
         }
         listenThread.interrupt();
-        listenThread.join();
         clientThreads.shutdown();
+    }
+
+    public void join() throws InterruptedException {
+        listenThread.join();
+        clientThreads.awaitTermination(Long.MAX_VALUE, TimeUnit.DAYS);
     }
 }

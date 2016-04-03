@@ -60,6 +60,7 @@ public class SimpleFtpServerTest {
             s2.close();
         } finally {
             server.shutdown();
+            server.join();
         }
     }
 }
