@@ -2,7 +2,6 @@ package ru.spbau.mit;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
-import java.net.SocketOption;
 import java.nio.ByteBuffer;
 import java.nio.channels.*;
 import java.nio.file.Path;
