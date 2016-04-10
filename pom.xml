@@ -84,7 +84,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>net.yeputons.spbau.practice.spring2016.interview1.GameServer</mainClass>
+                            <mainClass>ru.spbau.mit.Main</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
